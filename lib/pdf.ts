@@ -4,7 +4,9 @@ export async function extractTextFromPDF(file: File, onProgress?: (msg: string) 
   const pdfjsLib = await import('pdfjs-dist');
   
   // Use UNPKG CDN to load the worker. This avoids Next.js build issues with worker files.
-  pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.mjs`;
+  if (typeof window !== 'undefined' && 'Worker' in window) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.mjs`;
+  }
 
   const arrayBuffer = await file.arrayBuffer();
   

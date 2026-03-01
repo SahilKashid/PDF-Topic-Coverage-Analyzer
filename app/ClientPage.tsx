@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from 'motion/react';
 
 type Step = 'upload' | 'processing' | 'results';
 
-export default function Page() {
+export default function ClientPage() {
   const [notesFile, setNotesFile] = useState<File | null>(null);
   const [topicsFile, setTopicsFile] = useState<File | null>(null);
   const [step, setStep] = useState<Step>('upload');
@@ -102,38 +102,6 @@ export default function Page() {
     URL.revokeObjectURL(url);
   };
 
-  const handleDownloadMissingBatches = () => {
-    if (missingTopics.length === 0) return;
-    
-    const chunkSize = 20;
-    for (let i = 0; i < missingTopics.length; i += chunkSize) {
-      const batch = missingTopics.slice(i, i + chunkSize);
-      const batchNum = Math.floor(i / chunkSize) + 1;
-      const totalBatches = Math.ceil(missingTopics.length / chunkSize);
-      
-      let md = `# Missing Topics - Batch ${batchNum} of ${totalBatches}\n\n`;
-      md += `Total missing topics in this batch: ${batch.length}\n\n`;
-      
-      batch.forEach((r, idx) => {
-        md += `## ${idx + 1}. ${r.topic}\n`;
-        md += `**Details:** ${r.evidence}\n\n`;
-        md += `---\n\n`;
-      });
-
-      const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `missing-topics-batch-${batchNum}.md`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      // Small delay to help browser handle multiple downloads
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
-    }
-  };
-
   return (
     <main className="min-h-screen bg-black text-zinc-100 font-sans selection:bg-zinc-800 selection:text-white">
       {/* Header */}
@@ -146,16 +114,7 @@ export default function Page() {
             <h1 className="text-lg font-medium tracking-tight text-white">PDF Topic Coverage Analyzer</h1>
           </div>
           {step === 'results' && (
-            <div className="flex items-center space-x-3">
-              {missingTopics.length > 0 && (
-                <button
-                  onClick={handleDownloadMissingBatches}
-                  className="flex items-center space-x-1.5 text-sm font-medium text-rose-300 hover:text-rose-100 transition-colors bg-rose-500/10 hover:bg-rose-500/20 px-3 py-1.5 rounded-full border border-rose-500/20"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>Missing (Batches of 20)</span>
-                </button>
-              )}
+            <div className="flex items-center space-x-4">
               <button
                 onClick={handleDownloadMarkdown}
                 className="flex items-center space-x-1.5 text-sm font-medium text-zinc-300 hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-full"
@@ -180,7 +139,7 @@ export default function Page() {
       </header>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" initial={false}>
           {step === 'upload' && (
             <motion.div
               key="upload"
@@ -354,9 +313,10 @@ export default function Page() {
                         </button>
                       </div>
                       
-                      <AnimatePresence>
+                      <AnimatePresence initial={false}>
                         {expandedTopics[result.topic] && (
                           <motion.div
+                            key="expanded"
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: 'auto', opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
