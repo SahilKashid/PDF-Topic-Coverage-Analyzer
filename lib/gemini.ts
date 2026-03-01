@@ -22,7 +22,7 @@ export async function extractTextFromImages(
     parts.push({ text: prompt });
 
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-flash-latest-preview",
       contents: { parts },
     });
 
@@ -32,7 +32,7 @@ export async function extractTextFromImages(
     parts.push({ text: prompt });
 
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-flash-latest-preview",
       contents: { parts },
       config: {
         responseMimeType: "application/json",
@@ -68,7 +68,7 @@ export async function analyzeCoverage(
   topics: string[]
 ): Promise<CoverageResult[]> {
   const response = await ai.models.generateContent({
-    model: "gemini-3-flash-preview",
+    model: "gemini-flash-latest-preview",
     contents: `You are an expert educational assistant. You are given a notes document and a list of topics.
 For each topic in the list, carefully analyze the notes document to determine if the topic is adequately covered.
 Return a JSON array of objects with the following structure:
