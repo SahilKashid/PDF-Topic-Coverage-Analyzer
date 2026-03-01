@@ -1,0 +1,5 @@
+{
+  "name": "PDF Topic Coverage Analyzer",
+  "description": "Upload a notes PDF and a topics PDF to automatically check which topics are covered in the notes and which are missing.",
+  "requestFramePermissions": []
+}
