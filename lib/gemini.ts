@@ -22,7 +22,7 @@ export async function extractTextFromImages(
     parts.push({ text: prompt });
 
     const response = await ai.models.generateContent({
-      model: "gemini-flash-latest-preview",
+      model: "gemini-flash-latest",
       contents: { parts },
     });
 
@@ -32,7 +32,7 @@ export async function extractTextFromImages(
     parts.push({ text: prompt });
 
     const response = await ai.models.generateContent({
-      model: "gemini-flash-latest-preview",
+      model: "gemini-flash-latest",
       contents: { parts },
       config: {
         responseMimeType: "application/json",
