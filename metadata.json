@@ -1,0 +1,5 @@
+{
+  "name": "PDF Topic Coverage Analyzer",
+  "description": "Upload your study notes and a syllabus to use AI to cross-reference them and determine exactly which topics are covered and which are missing.",
+  "requestFramePermissions": []
+}
